@@ -1,3 +1,6 @@
+Double-Allocation of ETH in stHYPEWithdrawalModule.update() enables LP payouts from future redemptions (accounting double-spend)”
+
+
 pragma solidity ^0.8.25;
 import "forge-std/Test.sol";
 import "forge-std/console2.sol";
