@@ -137,3 +137,78 @@ int main() {
 12 1 14 5
 ```
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# third question:
+
+**Problem Statement**
+
+Write a C program to calculate the number of page faults using the FIFO (First-In-First-Out) page replacement algorithm for the reference string: 5 0 1 3 2 4 1 0 5
+
+- Frame size = 3
+
+
+**Instructions**
+
+- Write a comment to make your code readable.
+
+- Use descriptive variables in your (Name of the variables should show their purposes).
+
+- Ensure your code compiles without any errors/warnings/deprecations 
+
+- Avoid too many & unnecessary usages of white spaces (newline, spaces, tabs, …)
+
+- Always test the code thoroughly, before saving/submitting exercises/projects.
+
+
+**Example**
+
+Number of page faults using the FIFO for the reference string = 9
+
+**solution:**
+
+```c
+#include <stdio.h>
+
+int main() {
+    int referenceString[] = {5,0,1,3,2,4,1,0,5};
+    int referenceCount = 9;
+
+    int frameSize = 3;
+    int frames[3];
+    int nextFrameIndex = 0;
+    int pageFaults = 0;
+
+    // Initialize frames with -1 indicating empty
+    for (int i = 0; i < frameSize; i++) {
+        frames[i] = -1;
+    }
+
+    // FIFO Page Replacement Logic
+    for (int i = 0; i < referenceCount; i++) {
+        int currentPage = referenceString[i];
+        int pageFound = 0;
+
+        // Check if page already exists in frames
+        for (int j = 0; j < frameSize; j++) {
+            if (frames[j] == currentPage) {
+                pageFound = 1;
+                break;
+            }
+        }
+
+        // If page not found → page fault
+        if (!pageFound) {
+            frames[nextFrameIndex] = currentPage; // Replace using FIFO
+            nextFrameIndex = (nextFrameIndex + 1) % frameSize;
+            pageFaults++;
+        }
+    }
+
+    // Output ONLY page fault count
+    printf("%d", pageFaults);
+
+    return 0;
+}
+```
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
