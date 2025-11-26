@@ -212,3 +212,167 @@ int main() {
 ```
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# Fourth question:
+
+**Problem Statement**
+
+Write a C program to implement the LRU (Least Recently Used) Page Replacement Algorithm for the same reference string: 5 0 1 3 2 4 1 0 5, where  Frame capacity = 3
+
+
+**Instructions**
+
+- Write a comment to make your code readable.
+
+- Use descriptive variables in your (Name of the variables should show their purposes).
+
+- Ensure your code compiles without any errors/warnings/deprecations 
+
+- Avoid too many & unnecessary usages of white spaces (newline, spaces, tabs, …)
+
+- Always test the code thoroughly, before saving/submitting exercises/projects.
+
+
+**Example**
+
+Total Page Faults = 8
+
+**solution:**
+
+```c
+#include <stdio.h>
+
+int main() {
+    int referenceString[] = {5,0,1,3,2,4,1,0,5};
+    int referenceCount = 9;
+
+    int frameSize = 3;
+    int frames[3];
+    int lastUsedIndex[3];  // Tracks how recently each frame was used
+    int pageFaults = 0;
+    int timer = 0;
+
+    // Initialize frames as empty
+    for (int i = 0; i < frameSize; i++) {
+        frames[i] = -1;
+        lastUsedIndex[i] = -1;
+    }
+
+    // LRU Page Replacement Logic
+    for (int i = 0; i < referenceCount; i++) {
+        int currentPage = referenceString[i];
+        int pageFound = 0;
+
+        // Check if page already present
+        for (int j = 0; j < frameSize; j++) {
+            if (frames[j] == currentPage) {
+                pageFound = 1;
+                lastUsedIndex[j] = timer++;  // update recent usage
+                break;
+            }
+        }
+
+        // If not found → Page Fault
+        if (!pageFound) {
+            int lruIndex = 0;
+
+            // Find Least Recently Used frame
+            for (int j = 1; j < frameSize; j++) {
+                if (lastUsedIndex[j] < lastUsedIndex[lruIndex]) {
+                    lruIndex = j;
+                }
+            }
+
+            // Replace LRU page
+            frames[lruIndex] = currentPage;
+            lastUsedIndex[lruIndex] = timer++;
+            pageFaults++;
+        }
+    }
+
+    // Output only the result
+    printf("%d", pageFaults);
+
+    return 0;
+}
+```
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# fifth question:
+
+
+**Problem Statement**
+
+Write a C program to implement Round Robin scheduling for 5 processes. Where burst time for process P1 to P5 is - 5 15 4 3 9 and Time Quantum = 4. Calculate their Average Waiting Time and Average Turnaround Time.
+
+
+**Instructions**
+
+- Write a comment to make your code readable.
+
+- Use descriptive variables in your (Name of the variables should show their purposes).
+
+- Ensure your code compiles without any errors/warnings/deprecations 
+
+- Avoid too many & unnecessary usages of white spaces (newline, spaces, tabs, …)
+
+- Always test the code thoroughly, before saving/submitting exercises/projects.
+
+
+**Example**
+
+- Average Waiting Time: 15.80
+- Average Turnaround Time: 23.00
+
+```c
+#include <stdio.h>
+
+int main() {
+    int burstTime[5] = {5, 15, 4, 3, 9};
+    int remainingTime[5];
+    int completionTime[5];
+    int waitingTime[5];
+    int turnaroundTime[5];
+
+    int timeQuantum = 4;
+    int totalTime = 0;
+    int processes = 5;
+
+    for (int i = 0; i < processes; i++) {
+        remainingTime[i] = burstTime[i];
+    }
+
+    int done;
+    do {
+        done = 1;
+        for (int i = 0; i < processes; i++) {
+            if (remainingTime[i] > 0) {
+                done = 0;
+
+                if (remainingTime[i] <= timeQuantum) {
+                    totalTime += remainingTime[i];
+                    remainingTime[i] = 0;
+                    completionTime[i] = totalTime;
+                } else {
+                    remainingTime[i] -= timeQuantum;
+                    totalTime += timeQuantum;
+                }
+            }
+        }
+    } while (!done);
+
+    float sumWT = 0, sumTAT = 0;
+
+    for (int i = 0; i < processes; i++) {
+        turnaroundTime[i] = completionTime[i];
+        waitingTime[i] = turnaroundTime[i] - burstTime[i];
+
+        sumWT += waitingTime[i];
+        sumTAT += turnaroundTime[i];
+    }
+
+    printf("%.2f %.2f", sumWT / processes, sumTAT / processes);
+
+    return 0;
+}
+```
